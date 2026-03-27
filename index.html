@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dragonlight International — Strategic Advisory & Transformative Coaching</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <style>
+        :root {
+            --bg: #0e0e0d;
+            --surface: #141413;
+            --text: #e8e6e1;
+            --dim: #b5b1a9;
+            --muted: #918d85;
+            --accent: #c4a44a;
+            --accent-soft: rgba(196, 164, 74, 0.06);
+            --border: #252420;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            font-size: 21px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ---- Sticky nav ---- */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(14, 14, 13, 0.92);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border);
+            padding: 0.7rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.82rem;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-brand {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .nav-links a {
+            color: var(--dim);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        /* ---- Each "slide" ---- */
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 6rem 2.5rem;
+            max-width: 840px;
+            margin: 0 auto;
+            scroll-snap-align: start;
+            position: relative;
+        }
+
+        .slide::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 2.5rem;
+            right: 2.5rem;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .slide:last-child::after { display: none; }
+
+        /* ---- Scroll reveal ---- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: revealIn linear both;
+            animation-timeline: view();
+            animation-range: entry 0% entry 20%;
+        }
+
+        @keyframes revealIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @supports not (animation-timeline: view()) {
+            .reveal { opacity: 1; transform: none; }
+        }
+
+        /* Ensure hash-targeted slides are visible on direct navigation */
+        :target .reveal,
+        :target.reveal {
+            opacity: 1;
+            transform: none;
+            animation: none;
+        }
+
+        /* ---- Slide label ---- */
+        .slide-num {
+            font-size: 0.75rem;
+            color: var(--muted);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        /* ---- Typography ---- */
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 200;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 1.7rem;
+            font-weight: 300;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        h2 .accent { color: var(--accent); }
+
+        p {
+            font-size: 1rem;
+            margin-bottom: 1.2rem;
+            color: var(--dim);
+            max-width: 640px;
+        }
+
+        p.large {
+            font-size: 1.1rem;
+            color: var(--text);
+            font-weight: 300;
+        }
+
+        /* ---- Stats row ---- */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat { text-align: center; }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 200;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 0.4rem;
+        }
+
+        .stat-label {
+            font-size: 0.78rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            line-height: 1.5;
+        }
+
+        /* ---- Problem / Solution blocks ---- */
+        .contrast-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin: 2rem 0;
+        }
+
+        .contrast-block h4 {
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 1rem;
+        }
+
+        .contrast-block.problem h4 { color: var(--muted); }
+        .contrast-block.solution h4 { color: var(--accent); }
+
+        .contrast-block li {
+            font-size: 0.88rem;
+            color: var(--dim);
+            margin-bottom: 0.6rem;
+            list-style: none;
+            padding-left: 1.2rem;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .contrast-block.problem li::before {
+            content: "—";
+            position: absolute;
+            left: 0;
+            color: var(--muted);
+        }
+
+        .contrast-block.solution li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        /* ---- Service cards ---- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            border: 1px solid var(--border);
+            padding: 2rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        .card-title {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 0.8rem;
+            letter-spacing: 0.03em;
+        }
+
+        .card p { font-size: 0.82rem; line-height: 1.7; }
+
+        /* ---- Market data ---- */
+        .market-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .market-stat {
+            border-left: 1px solid var(--accent);
+            padding-left: 1.5rem;
+        }
+
+        .market-stat .number {
+            font-size: 1.6rem;
+            font-weight: 200;
+            color: var(--accent);
+            display: block;
+        }
+
+        .market-stat .label {
+            font-size: 0.85rem;
+            color: var(--dim);
+            margin-top: 0.3rem;
+        }
+
+        /* ---- The Ask ---- */
+        .ask-block {
+            border: 1px solid var(--accent);
+            padding: 3rem;
+            text-align: center;
+            margin: 2rem 0;
+            background: var(--accent-soft);
+        }
+
+        .ask-block h2 { margin-bottom: 1rem; max-width: 100%; }
+
+        .ask-block p {
+            max-width: 100%;
+            text-align: center;
+            margin: 0 auto 1rem;
+        }
+
+        /* ---- CTA ---- */
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 3rem;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.78rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: 500;
+            transition: all 0.35s ease;
+            background: transparent;
+            margin-top: 1.5rem;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            background: var(--accent);
+            color: var(--bg);
+            box-shadow: 0 0 40px rgba(196, 164, 74, 0.12);
+        }
+
+        /* ---- Contact Form ---- */
+        .contact-form {
+            max-width: 480px;
+            margin: 2rem auto 0;
+            text-align: left;
+        }
+
+        .contact-form input,
+        .contact-form select {
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.9rem 1.1rem;
+            font-family: inherit;
+            font-size: 0.88rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.2s ease;
+            -webkit-appearance: none;
+            border-radius: 0;
+        }
+
+        .contact-form input:focus,
+        .contact-form select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .contact-form input::placeholder {
+            color: var(--muted);
+        }
+
+        .contact-form select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23918d85' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1.1rem center;
+        }
+
+        .contact-form select:valid { color: var(--text); }
+
+        .contact-form select option {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .contact-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .contact-form button {
+            width: 100%;
+        }
+
+        @media (max-width: 700px) {
+            .contact-row { grid-template-columns: 1fr; }
+        }
+
+        /* ---- Footer ---- */
+        .footer {
+            font-size: 0.7rem;
+            color: var(--muted);
+            margin-top: 2rem;
+            line-height: 2.2;
+            text-align: center;
+        }
+
+        .footer a { color: var(--dim); text-decoration: none; }
+        .footer a:hover { color: var(--accent); }
+
+        .compliance {
+            font-size: 0.65rem;
+            color: var(--muted);
+            margin-top: 6rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border);
+            line-height: 2;
+        }
+
+        .compliance a { color: var(--dim); text-decoration: none; }
+        .compliance a:hover { color: var(--accent); }
+
+        .compliance h5 {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--dim);
+        }
+
+        .compliance p {
+            font-size: 0.65rem;
+            color: var(--muted);
+            max-width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 700px) {
+            .slide { padding: 4rem 1.5rem; }
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.4rem; }
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .contrast-grid { grid-template-columns: 1fr; }
+            .card-grid { grid-template-columns: 1fr; }
+            .market-stats { grid-template-columns: 1fr; }
+            .nav { padding: 0.7rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav">
+        <a href="./" class="nav-brand">Dragonlight</a>
+        <div class="nav-links">
+            <a href="#architect">Architect</a>
+            <a href="daos/">DAOS</a>
+            <a href="#begin">Connect</a>
+        </div>
+    </nav>
+
+    <!-- ======== SLIDE 1: ORIENTATION ======== -->
+    <div class="slide" style="padding-top: 5rem;">
+        <div class="reveal">
+            <h1>Dragonlight International</h1>
+            <p class="large">Exists to turn you into the edge no competitor can replicate. Operational clarity and execution intelligence for principals, operators, and GPs — making every deployment decision sharper, expanding execution capacity, and creating headroom for greater potential upside with better downside protection. Compounding your edge with every engagement.</p>
+            <p style="margin-top: 2rem; font-style: italic; font-size: 0.92rem; color: var(--dim);">"Finding the coherence and harmony between the language they speak and the frequency I bring."</p>
+            <p style="color: var(--muted); font-size: 0.88rem; margin-top: 3rem;">Founded by Korrigon · Denver, Colorado · 2026</p>
+        </div>
+    </div>
+
+    <!-- ======== SLIDE 2: THE GAP (OCDCAR: Concern) ======== -->
+    <div class="slide">
+        <div class="reveal">
+            <div class="slide-num">The Gap</div>
+            <h2>Most principals operate with a fracture between <span class="accent">who they are</span> and <span class="accent">what they manage</span>.</h2>
+
+            <div class="contrast-grid">
+                <div class="contrast-block problem">
+                    <h4>The Current State</h4>
+                    <ul>
+                        <li>Sophisticated in your domain — underserved by existing advisory</li>
+                        <li>Operational clarity eroding under decision volume and velocity</li>
+                        <li>Slippage between capital timing and execution capacity</li>
+                        <li>Advisory that doesn't operate at the depth your positions demand</li>
+                        <li>No infrastructure integrating the dimensions that actually drive your edge</li>
+                    </ul>
+                </div>
+                <div class="contrast-block solution">
+                    <h4>The Opportunity</h4>
+                    <ul>
+                        <li>An intelligence system that adapts to the operator</li>
+                        <li>Advisory that compounds — every session makes the next one sharper</li>
+                        <li>Operational clarity across deal flow, timing, and execution</li>
+                        <li>Archetypal and nervous system data integrated into strategic decisions</li>
+                        <li>The alignment where <span style="color: var(--accent);">clarity</span>, <span style="color: var(--accent);">timing</span>, and <span style="color: var(--accent);">conviction</span> become the same thing</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======== SLIDE 3: THE ARCHITECT (OCDCAR: Credibility) ======== -->
+    <div class="slide" id="architect">
+        <div class="reveal">
+            <div class="slide-num">The Architect</div>
+            <h2>Two decades building at <span class="accent">every stage</span> from idea to IPO.</h2>
+
+            <div class="stats-row">
+                <div class="stat">
+                    <span class="stat-number">$1B+</span>
+                    <span class="stat-label">Technology assets built</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">100+</span>
+                    <span class="stat-label">Multi-millionaires created</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">22x</span>
+                    <span class="stat-label">Returns in 7 months</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">20+</span>
+                    <span class="stat-label">Years at scale</span>
+                </div>
+            </div>
+
+            <p>Former CEO/CTO, systems architect, and transformative advisor. Two decades of building companies, products, and wealth infrastructure from zero to scale. Now applying the same architecture inward — and making it available to a founding cohort.</p>
+        </div>
+    </div>
+
+    <!-- ======== SLIDE 4: ENGAGEMENTS (OCDCAR: Desire) ======== -->
+    <div class="slide">
+        <div class="reveal">
+            <div class="slide-num">Engagements</div>
+            <h2>Three ways to <span class="accent">work together</span>.</h2>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-title">Strategic Advisory</div>
+                    <p>Operational clarity, efficiency, and intelligence — tightening the alignment between deal timing, capital flow, and execution capacity. Making the right moves at the right time, with greater precision and speed across your investment thesis.</p>
+                </div>
+                <div class="card">
+                    <div class="card-title">Principal Advisory</div>
+                    <p>Self Coherence Audits, nervous system calibration, and identity integration. The bridge between the version of you that performs and the version that operates from wholeness.</p>
+                </div>
+                <div class="card">
+                    <div class="card-title">Proprietary Intelligence Systems</div>
+                    <p>A bespoke operating system that compounds your pattern recognition, tracks your state, and coordinates strategy across every domain. The hedge against misalignment between what you know and when you act.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======== SLIDE 5: DAOS (OCDCAR: Desire continued) ======== -->
+    <div class="slide" id="daos">
+        <div class="reveal">
+            <div class="slide-num">The System</div>
+            <h2><span class="accent">DAOS</span> — Dharmic Alignment Operating System</h2>
+
+            <p class="large">A proprietary intelligence system available exclusively through Dragonlight advisory engagements. 13 coordinated personas. Compounding pattern recognition. Nervous system awareness. Archetypal data informing every decision.</p>
+
+            <p>Replaces or augments: chief of staff, executive coach, project manager, brand strategist, research analyst, personal assistant. Combined annual value: <span style="color: var(--accent);">$200,000–$400,000+</span>.</p>
+
+            <p>Founding advisory cohort now forming.</p>
+
+            <p style="font-size: 0.82rem;"><a href="daos/" style="color: var(--accent); text-decoration: none;">→ View DAOS product details</a></p>
+        </div>
+    </div>
+
+    <!-- ======== SLIDE 6: MARKET (OCDCAR: Confidence) ======== -->
+    <div class="slide">
+        <div class="reveal">
+            <div class="slide-num">The Landscape</div>
+            <h2>Nothing else <span class="accent">operates</span> at this intersection.</h2>
+
+            <div class="market-stats">
+                <div class="market-stat">
+                    <span class="number">$200K+</span>
+                    <span class="label">Recurring annual value of the roles DAOS replaces — compounding beyond the engagement horizon</span>
+                </div>
+                <div class="market-stat">
+                    <span class="number">72 hrs</span>
+                    <span class="label">Operational MVP — built using itself to build itself</span>
+                </div>
+                <div class="market-stat">
+                    <span class="number">13</span>
+                    <span class="label">Named AI personas coordinating across every domain of life and business</span>
+                </div>
+                <div class="market-stat">
+                    <span class="number">0</span>
+                    <span class="label">Direct competitors combining strategic advisory + AI intelligence + archetypal depth</span>
+                </div>
+            </div>
+
+            <p>The principals who benefit most from this work are already successful. They're looking for advisory infrastructure that matches the sophistication of their positions — and finding nothing that operates at the depth their decisions demand.</p>
+        </div>
+    </div>
+
+    <!-- ======== SLIDE 7: PHILOSOPHY (The Why) ======== -->
+    <div class="slide">
+        <div class="reveal">
+            <div class="slide-num">The Philosophy</div>
+            <h2>The purpose of this work is <span class="accent">dharmic alignment</span>.</h2>
+
+            <p class="large">Every principal carries two operating systems — the one the market trained and the one that knows. When those two systems are coherent, every decision downstream improves. When they're not, no amount of intelligence, capital, or execution compensates for the fracture.</p>
+
+            <p>Dragonlight exists because the most sophisticated operators in the world are underserved at the dimension that matters most: the alignment between who they are and how they deploy. The edge isn't more data, more speed, or more capital. The edge is coherence — and coherence compounds.</p>
+        </div>
+    </div>
+
+    <!-- ======== SLIDE 8: THE ASK (OCDCAR: Action + Reassurance) ======== -->
+    <div class="slide" id="begin">
+        <div class="reveal">
+            <div class="slide-num">Next Step</div>
+
+            <div class="ask-block">
+                <h2>Begin a <span class="accent">Conversation</span></h2>
+                <p>Engagements are limited by availability in order to preserve the highest standard of advisory. If this resonates, the next step is a conversation — not a checkout page.</p>
+
+                <form action="https://api.web3forms.com/submit" method="POST" class="contact-form">
+                    <input type="hidden" name="access_key" value="621f0819-89db-4540-91ae-cbddc74e26fc">
+                    <input type="hidden" name="subject" value="Dragonlight — New Inquiry">
+                    <input type="hidden" name="from_name" value="Dragonlight Contact Form">
+                    <input type="checkbox" name="botcheck" style="display: none;">
+                    <div class="contact-row">
+                        <input type="text" name="name" placeholder="Name" required>
+                        <input type="email" name="email" placeholder="Email" required>
+                    </div>
+                    <select name="inquiry" required>
+                        <option value="" disabled selected>Area of interest...</option>
+                        <option value="advisory">Strategic Advisory</option>
+                        <option value="principal">Principal Advisory</option>
+                        <option value="systems">Intelligence Systems</option>
+                        <option value="partnership">Partnership or Referral</option>
+                        <option value="other">Not sure yet — let's talk</option>
+                    </select>
+                    <input type="text" name="context" placeholder="Briefly describe what brought you here">
+                    <button type="submit" class="cta-button">Begin a Conversation</button>
+                </form>
+            </div>
+
+            <div class="footer">
+                <p>&copy; 2026 Dragonlight International · Denver, CO · <a href="https://threads.net/@the.korrigon.show">Korrigon</a> · <a href="daos/">DAOS</a></p>
+            </div>
+
+            <div class="compliance" id="terms">
+                <h5>Terms of Service</h5>
+                <p>By engaging Dragonlight International's services, you agree to the terms outlined in your engagement agreement. All consulting engagements are governed by individual service agreements executed prior to commencement of work. Dragonlight International reserves the right to decline or discontinue any engagement at its sole discretion.</p>
+
+                <h5 id="privacy">Privacy Policy</h5>
+                <p>Dragonlight International collects only information necessary to deliver consulting services — typically name, email, and engagement-specific context. We do not sell, share, or distribute client information to third parties. Payment processing is handled by Stripe, Inc., subject to <a href="https://stripe.com/privacy">Stripe's privacy policy</a>. Client session data, system configurations, and consulting deliverables remain confidential and are not shared without explicit written consent.</p>
+
+                <h5 id="refunds">Refund &amp; Cancellation Policy</h5>
+                <p>Reservation deposits ($97) are fully refundable within 14 days of purchase if no consulting work has commenced. For active engagements, cancellation terms are governed by the individual service agreement. The Founding Advisory engagement ($7,500/month) may be cancelled after the 3-month minimum commitment period with 30 days written notice. Unused portions of prepaid months are not refundable.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
