@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAOS Onboarding — Seed Questions</title>
+    <style>
+        :root {
+            --bg: #0e0e0d;
+            --surface: #141413;
+            --text: #e8e6e1;
+            --dim: #b5b1a9;
+            --muted: #918d85;
+            --accent: #c4a44a;
+            --accent-soft: rgba(196, 164, 74, 0.06);
+            --border: #252420;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            font-size: 18px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 3rem 2rem 6rem;
+        }
+
+        .header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 200;
+            color: var(--accent);
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 0.92rem;
+            color: var(--dim);
+            max-width: 580px;
+            line-height: 1.8;
+        }
+
+        .section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .question {
+            margin-bottom: 1.8rem;
+        }
+
+        .question label {
+            display: block;
+            font-size: 0.92rem;
+            color: var(--text);
+            margin-bottom: 0.6rem;
+            line-height: 1.6;
+        }
+
+        .question .hint {
+            display: block;
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-bottom: 0.6rem;
+            font-style: italic;
+        }
+
+        .question textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 0.8rem 1rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            resize: vertical;
+            transition: border-color 0.2s;
+        }
+
+        .question textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .question textarea.large {
+            min-height: 160px;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-size: 0.88rem;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .submit-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .submit-section p {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
+
+        button[type="submit"] {
+            padding: 1rem 3.5rem;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            background: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-size: 0.82rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background: var(--accent);
+            color: var(--bg);
+            box-shadow: 0 0 40px rgba(196, 164, 74, 0.12);
+        }
+
+        .progress-note {
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-top: 1rem;
+        }
+
+        .footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.72rem;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        .footer a { color: var(--dim); text-decoration: none; }
+        .footer a:hover { color: var(--accent); }
+
+        @media (max-width: 600px) {
+            .container { padding: 2rem 1.2rem 4rem; }
+            .header h1 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="header">
+            <h1>DAOS Onboarding</h1>
+            <p>These questions generate the seed data for your personalized DAOS instance. There are no wrong answers. Stream of consciousness is welcome — the system parses intent, not polish. The more context you share, the more intelligent the system is from day one.</p>
+        </div>
+
+        <form action="https://api.web3forms.com/submit" method="POST">
+            <input type="hidden" name="access_key" value="621f0819-89db-4540-91ae-cbddc74e26fc">
+            <input type="hidden" name="subject" value="DAOS Onboarding — Seed Questions">
+            <input type="hidden" name="redirect" value="https://dragonlightintl.pages.dev/">
+            <input type="hidden" name="from_name" value="DAOS Onboarding Form">
+
+            <!-- Contact -->
+            <div class="section">
+                <div class="section-label">Contact</div>
+                <div class="question">
+                    <label>Name</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="question">
+                    <label>Email</label>
+                    <input type="email" name="email" required>
+                </div>
+            </div>
+
+            <!-- Identity & Values -->
+            <div class="section">
+                <div class="section-label">Identity & Values</div>
+
+                <div class="question">
+                    <label>1. What are the things that, when violated, produce the sharpest signal of wrongness for you?</label>
+                    <span class="hint">Your core values — the non-negotiable compass points.</span>
+                    <textarea maxlength="1000" name="Q1 - Core Values" class="large"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>2. What are your non-negotiables — boundaries that are not up for negotiation regardless of circumstance?</label>
+                    <textarea maxlength="1000" name="Q2 - Non-Negotiables" class="large"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>3. What are you here to express? What's the dharmic thread — the thing that is most uniquely, irreducibly you?</label>
+                    <textarea maxlength="1000" name="Q3 - Dharmic Expression"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>4. What drains your energy? What generates it?</label>
+                    <span class="hint">Both sides — what depletes you and what fills you up.</span>
+                    <textarea maxlength="1000" name="Q4 - Drains vs Generates" class="large"></textarea>
+                </div>
+            </div>
+
+            <!-- How You Work -->
+            <div class="section">
+                <div class="section-label">How You Work</div>
+
+                <div class="question">
+                    <label>5. What conditions produce your best work?</label>
+                    <span class="hint">Environment, inputs, rhythms, time of day, solitude vs. collaboration, etc.</span>
+                    <textarea maxlength="1000" name="Q5 - Best Work Conditions" class="large"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>6. How do you make decisions? What's your inner authority process — gut, logic, emotion, consultation, time?</label>
+                    <textarea maxlength="1000" name="Q6 - Decision Making"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>7. What does good sequencing look like for you? What compounds well together, and what creates friction?</label>
+                    <textarea maxlength="1000" name="Q7 - Sequencing"></textarea>
+                </div>
+            </div>
+
+            <!-- Nervous System -->
+            <div class="section">
+                <div class="section-label">Nervous System</div>
+
+                <div class="question">
+                    <label>8. What are your known triggers — the things that dysregulate you fastest?</label>
+                    <textarea maxlength="1000" name="Q8 - Triggers" class="large"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>9. What are your known regulators — what brings you back when you're activated or depleted?</label>
+                    <textarea maxlength="1000" name="Q9 - Regulators"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>10. What are your early warning signals of dysregulation? What does your body do when it's telling you to stop?</label>
+                    <textarea maxlength="1000" name="Q10 - Warning Signals"></textarea>
+                </div>
+            </div>
+
+            <!-- Communication Protocol -->
+            <div class="section">
+                <div class="section-label">Communication Protocol</div>
+
+                <div class="question">
+                    <label>11. How do you want the system to talk to you? Are questions okay? Direct suggestions? What communication style works best?</label>
+                    <textarea maxlength="1000" name="Q11 - Communication Style"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>12. What language or framing would feel annoying or wrong coming from the system?</label>
+                    <textarea maxlength="1000" name="Q12 - Communication Anti-Patterns"></textarea>
+                </div>
+            </div>
+
+            <!-- Current Season -->
+            <div class="section">
+                <div class="section-label">Current Season</div>
+
+                <div class="question">
+                    <label>13. What season of life and work is this? What's the primary energetic theme right now?</label>
+                    <textarea maxlength="1000" name="Q13 - Current Season"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>14. What's genuinely alive — what has real pull and energy across any area of life?</label>
+                    <textarea maxlength="1000" name="Q14 - What's Alive" class="large"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>15. What's intentionally set aside — not abandoned, just not the current season?</label>
+                    <textarea maxlength="1000" name="Q15 - What's Dormant"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>16. What are the active constraints — what's currently limiting, draining, or creating friction?</label>
+                    <textarea maxlength="1000" name="Q16 - Active Constraints" class="large"></textarea>
+                </div>
+            </div>
+
+            <!-- Life Structure -->
+            <div class="section">
+                <div class="section-label">Life Structure</div>
+
+                <div class="question">
+                    <label>17. If you organized your life into three to five major areas, what would they be?</label>
+                    <textarea maxlength="1000" name="Q17 - Life Pillars"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>18. For each area, what would success look like this season?</label>
+                    <textarea maxlength="1000" name="Q18 - Season Outcomes" class="large"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>19. For each area, what's the single highest-leverage next action right now?</label>
+                    <textarea maxlength="1000" name="Q19 - Highest Leverage Actions" class="large"></textarea>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="submit-section">
+                <p>Your answers are sent directly and securely to Dragonlight. Nothing is stored on this page. The more you share, the more your system knows on day one. Note: each field has an approximate limit of 1,000 characters due to the form service. For longer answers, save your responses in the markdown version and send it directly.</p>
+                <button type="submit">Submit Seed Data</button>
+                <p class="progress-note">Answers are not saved between visits — complete in one sitting, or save your work locally first.</p>
+            </div>
+
+        </form>
+
+        <div class="footer">
+            <p><a href="../">Dragonlight International</a> · <a href="../#privacy">Privacy Policy</a></p>
+            <p>&copy; 2026 Dragonlight International. All rights reserved.</p>
+        </div>
+
+    </div>
+
+</body>
+</html>
