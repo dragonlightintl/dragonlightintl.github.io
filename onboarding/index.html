@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAOS Onboarding — Seed Questions</title>
+    <style>
+        :root {
+            --bg: #0e0e0d;
+            --surface: #141413;
+            --text: #e8e6e1;
+            --dim: #b5b1a9;
+            --muted: #918d85;
+            --accent: #c4a44a;
+            --accent-soft: rgba(196, 164, 74, 0.06);
+            --border: #252420;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            font-size: 18px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 3rem 2rem 6rem;
+        }
+
+        .header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 200;
+            color: var(--accent);
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 0.92rem;
+            color: var(--dim);
+            max-width: 580px;
+            line-height: 1.8;
+        }
+
+        .section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .question {
+            margin-bottom: 1.8rem;
+        }
+
+        .question label {
+            display: block;
+            font-size: 0.92rem;
+            color: var(--text);
+            margin-bottom: 0.6rem;
+            line-height: 1.6;
+        }
+
+        .question .hint {
+            display: block;
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-bottom: 0.6rem;
+            font-style: italic;
+        }
+
+        .question textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 0.8rem 1rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            resize: vertical;
+            transition: border-color 0.2s;
+        }
+
+        .question textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .question textarea.large {
+            min-height: 160px;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-size: 0.88rem;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .submit-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .submit-section p {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
+
+        button[type="submit"] {
+            padding: 1rem 3.5rem;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            background: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-size: 0.82rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background: var(--accent);
+            color: var(--bg);
+            box-shadow: 0 0 40px rgba(196, 164, 74, 0.12);
+        }
+
+        .progress-note {
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-top: 1rem;
+        }
+
+        .footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.72rem;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        .footer a { color: var(--dim); text-decoration: none; }
+        .footer a:hover { color: var(--accent); }
+
+        @media (max-width: 600px) {
+            .container { padding: 2rem 1.2rem 4rem; }
+            .header h1 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="header">
+            <h1>DAOS Onboarding</h1>
+            <p>These questions generate the seed data for your personalized DAOS instance. There are no wrong answers. Stream of consciousness is welcome — the system parses intent, not polish. The more context you share, the more intelligent the system is from day one.</p>
+        </div>
+
+        <form action="https://api.web3forms.com/submit" method="POST">
+            <input type="hidden" name="access_key" value="621f0819-89db-4540-91ae-cbddc74e26fc">
+            <input type="hidden" name="subject" value="DAOS Onboarding — Seed Questions">
+            <input type="hidden" name="redirect" value="https://dragonlightintl.pages.dev/">
+            <input type="hidden" name="from_name" value="DAOS Onboarding Form">
+
+            <!-- Contact -->
+            <div class="section">
+                <div class="section-label">Contact</div>
+                <div class="question">
+                    <label>Name</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="question">
+                    <label>Email</label>
+                    <input type="email" name="email" required>
+                </div>
+            </div>
+
+            <!-- Identity & Values -->
+            <div class="section">
+                <div class="section-label">Identity & Values</div>
+
+                <div class="question">
+                    <label>1. What values, when violated, produce the strongest reaction in you — the ones where your whole system says <em>no</em>?</label>
+                    <span class="hint">Example: "Autonomy — being told what to do. Dishonesty. Someone disrespecting my time. Cruelty."</span>
+                    <textarea maxlength="1000" name="Q1 - Core Values" class="large"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>2. What boundaries or conditions are non-negotiable for you right now — the ones that hold regardless of circumstances?</label>
+                    <span class="hint">Example: "No working past 9pm. Must see my kids every week. No one gets to tell me how to run my business."</span>
+                    <textarea maxlength="1000" name="Q2 - Non-Negotiables" class="large"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>3. What specifically drains your energy, and what specifically fills it back up?</label>
+                    <span class="hint">Specific is more useful than general. "Two hours of admin with no creative break" is more useful than "boring tasks." "A walk outside with no agenda" is more useful than "nature."</span>
+                    <textarea maxlength="1000" name="Q3 - Drains vs Fills" class="large"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>4. What's the through-line of your life and work — the thing that feels most like <em>you</em> when you're doing it, and most wrong when you're not?</label>
+                    <span class="hint">This can be a clear mission statement or a rough sense. Both are useful.</span>
+                    <textarea maxlength="1000" name="Q4 - Dharmic Thread"></textarea>
+                </div>
+            </div>
+
+            <!-- Nervous System -->
+            <div class="section">
+                <div class="section-label">Nervous System</div>
+
+                <div class="question">
+                    <label>5. What are your known triggers — the things that dysregulate you fastest?</label>
+                    <span class="hint">Include severity if you can. "Raised voices — hard no" is different from "clutter — low-grade but compounds." Sensory, emotional, environmental, interpersonal — all relevant.</span>
+                    <textarea maxlength="1000" name="Q5 - Triggers" class="large"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>6. What reliably brings you back to baseline when you're activated, overwhelmed, or depleted?</label>
+                    <span class="hint">What actually works, not what theoretically should. "Walking outside for 15 minutes" or "putting on headphones and going nonverbal for a while" — the real ones.</span>
+                    <textarea maxlength="1000" name="Q6 - Regulators"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>7. What does your body or behavior do when it's telling you to stop — before you actually hit the wall?</label>
+                    <span class="hint">Example: "My sentences get shorter. I start forgetting words. My jaw clenches. I get snappy over small things."</span>
+                    <textarea maxlength="1000" name="Q7 - Warning Signals"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>8. How long can you sustain focused work before the quality drops? Does time of day, day of week, or any cyclical pattern affect your capacity?</label>
+                    <span class="hint">Example: "Best work is 9am-1pm. After 2 hours of deep focus I need a real break. Luteal phase is review mode, not creation mode."</span>
+                    <textarea maxlength="1000" name="Q8 - Capacity Patterns"></textarea>
+                </div>
+            </div>
+
+            <!-- How You Work -->
+            <div class="section">
+                <div class="section-label">How You Work</div>
+
+                <div class="question">
+                    <label>9. What conditions produce your best work — environment, inputs, rhythms, time of day, solitude vs. collaboration, anything relevant?</label>
+                    <span class="hint">Example: "Quiet room, music on, coffee, morning. Creative work needs solitude. Admin can happen in a coffee shop."</span>
+                    <textarea maxlength="1000" name="Q9 - Best Work Conditions" class="large"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>10. How do you actually make decisions — gut feeling, logical analysis, emotional processing, consultation with others, sleeping on it, or some combination?</label>
+                    <span class="hint">If it depends on the size of the decision, say so. "Small decisions are instant. Big ones need 24-48 hours to settle in my body" is useful data.</span>
+                    <textarea maxlength="1000" name="Q10 - Decision Making"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>11. What task sequences compound well together for you, and which ones create friction?</label>
+                    <span class="hint">Example: "Movement before creative work amplifies everything. Admin first thing in the morning kills the whole day."</span>
+                    <textarea maxlength="1000" name="Q11 - Sequencing"></textarea>
+                </div>
+            </div>
+
+            <!-- Communication Protocol -->
+            <div class="section">
+                <div class="section-label">Communication Protocol</div>
+
+                <div class="question">
+                    <label>12. How should the system communicate with you — are questions okay, are direct suggestions helpful, do you need praise before constructive input, are you better with blunt or with gentle?</label>
+                    <span class="hint">This shapes every interaction. "Be direct, skip the pleasantries" produces a very different system than "Lead with what's working before telling me what's not." Be honest about what actually works.</span>
+                    <textarea maxlength="1000" name="Q12 - Communication Style" class="large"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>13. What language, framing, or communication style would feel wrong, annoying, or patronizing coming from the system?</label>
+                    <span class="hint">Example: "Don't call me 'buddy.' Don't tell me to 'just relax.' Don't repeat back what I said like a therapist. Don't be chipper when I'm clearly frustrated."</span>
+                    <textarea maxlength="1000" name="Q13 - Communication Anti-Patterns"></textarea>
+                </div>
+            </div>
+
+            <!-- Current Season -->
+            <div class="section">
+                <div class="section-label">Current Season</div>
+
+                <div class="question">
+                    <label>14. What season of life and work is this for you — what's the primary theme or chapter right now?</label>
+                    <span class="hint">Example: "Rebuilding after a major transition. Revenue is the priority but I'm also processing a lot personally."</span>
+                    <textarea maxlength="1000" name="Q14 - Current Season"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>15. What has genuine energy and pull for you right now — the things where motivation is real, across any area of life?</label>
+                    <span class="hint">Business, creative, relational, health, spiritual — any domain counts. If it has pull, name it.</span>
+                    <textarea maxlength="1000" name="Q15 - What's Alive" class="large"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>16. What have you intentionally set aside for now — not abandoned, just not this season?</label>
+                    <textarea maxlength="1000" name="Q16 - What's Dormant"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>17. What is currently limiting you, draining your resources, or creating friction — financial, logistical, relational, health, environmental?</label>
+                    <span class="hint">The system optimizes around real constraints, not ideal scenarios. The more honest this is, the more useful the system is from day one.</span>
+                    <textarea maxlength="1000" name="Q17 - Active Constraints" class="large"></textarea>
+                </div>
+            </div>
+
+            <!-- Life Structure -->
+            <div class="section">
+                <div class="section-label">Life Structure</div>
+
+                <div class="question">
+                    <label>18. If you organized your entire life into three to five major areas, what would they be?</label>
+                    <span class="hint">Example: "Body/Health, Business, Family, Creative Work" or "Career, Relationships, Health, Personal Growth, Finances"</span>
+                    <textarea maxlength="1000" name="Q18 - Life Pillars"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>19. For each of your life areas: what would success look like this season — the result that signals things are working?</label>
+                    <span class="hint">One outcome per area. Current season, not lifetime.</span>
+                    <textarea maxlength="1000" name="Q19 - Season Outcomes" class="large"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>20. For each life area: what is the single highest-leverage action right now — the one thing that moves the needle most?</label>
+                    <span class="hint">One action per area. The thing that, if it happened this week, would create the most downstream momentum.</span>
+                    <textarea maxlength="1000" name="Q20 - Highest Leverage Actions" class="large"></textarea>
+                </div>
+            </div>
+
+            <!-- Health & Body -->
+            <div class="section">
+                <div class="section-label">Health & Body</div>
+
+                <div class="question">
+                    <label>21. Basic body data: height, weight, age. Any medications, supplements, dietary constraints, or health conditions that affect your energy or cognitive function?</label>
+                    <span class="hint">This is for system calibration — hydration targets, energy management, supplement reminders. Share what's relevant; skip what's not.</span>
+                    <textarea maxlength="1000" name="Q21 - Body Basics"></textarea>
+                </div>
+
+                <div class="question">
+                    <label>22. What does your current movement/exercise practice look like, and how is your sleep — the reality, not the ideal?</label>
+                    <span class="hint">Example: "Walking 3x/week, no gym right now. Sleep is 6-7 hours, wake up once. Trouble falling asleep when stressed."</span>
+                    <textarea maxlength="1000" name="Q22 - Movement & Sleep"></textarea>
+                </div>
+            </div>
+
+            <!-- Relational Context -->
+            <div class="section">
+                <div class="section-label">Relational Context</div>
+
+                <div class="question">
+                    <label>23. Who are the key people in your life right now whose presence, schedules, or dynamics affect your daily energy and decisions?</label>
+                    <span class="hint">Partners, kids, business partners, close collaborators. Brief context is helpful: "Two kids, every other week" or "Business partner, we talk daily."</span>
+                    <textarea maxlength="1000" name="Q23 - Key People"></textarea>
+                </div>
+            </div>
+
+            <!-- Technology & Tools -->
+            <div class="section">
+                <div class="section-label">Technology & Tools</div>
+
+                <div class="question">
+                    <label>24. What apps and tools do you actually use consistently — calendar, notes, task management, health tracking, communication platforms?</label>
+                    <span class="hint">Only the ones you actually use. The real stack, not the aspirational one.</span>
+                    <textarea maxlength="1000" name="Q24 - Current Tools"></textarea>
+                </div>
+            </div>
+
+            <!-- Anything Else -->
+            <div class="section">
+                <div class="section-label">Anything Else</div>
+
+                <div class="question">
+                    <label>25. Anything else the system should know about you that these questions didn't cover?</label>
+                    <span class="hint">Stream of consciousness is welcome. The system parses intent, not polish.</span>
+                    <textarea maxlength="1000" name="Q25 - Open Field" class="large"></textarea>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="submit-section">
+                <p>Your answers are sent directly and securely to Dragonlight. Nothing is stored on this page. The more you share, the more your system knows on day one. Note: each field has an approximate limit of 1,000 characters due to the form service. For longer answers, save your responses in the markdown version and send it directly.</p>
+                <button type="submit">Submit Seed Data</button>
+                <p class="progress-note">Answers are not saved between visits — complete in one sitting, or save your work locally first.</p>
+            </div>
+
+        </form>
+
+        <div class="footer">
+            <p><a href="../">Dragonlight International</a> · <a href="../#privacy">Privacy Policy</a></p>
+            <p>&copy; 2026 Dragonlight International. All rights reserved.</p>
+        </div>
+
+    </div>
+
+</body>
+</html>

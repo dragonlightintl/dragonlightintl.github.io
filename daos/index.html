@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAOS — Dharmic Alignment Operating System</title>
+    <style>
+        :root {
+            --bg: #111110;
+            --text: #e8e6e1;
+            --dim: #5a5752;
+            --mid: #918d85;
+            --accent: #c4a44a;
+            --accent-glow: rgba(196, 164, 74, 0.06);
+            --border: #2a2a27;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', 'Courier New', monospace;
+            background: var(--bg);
+            color: var(--dim);
+            line-height: 2rem;
+            font-size: 19px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .terminal {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 3rem 2rem 50vh;
+            position: relative;
+        }
+
+        .line {
+            padding: 0.15rem 0;
+            padding-left: 2.5rem;
+            position: relative;
+            animation: lineFocus linear both;
+            animation-timeline: view();
+            animation-range: entry 0% exit 100%;
+        }
+
+        @keyframes lineFocus {
+            0%   { color: var(--dim); opacity: 0.25; transform: scale(0.97); }
+            35%  { color: var(--text); opacity: 1; transform: scale(1); }
+            50%  { color: var(--text); opacity: 1; transform: scale(1.005); }
+            65%  { color: var(--text); opacity: 1; transform: scale(1); }
+            100% { color: var(--dim); opacity: 0.25; transform: scale(0.97); }
+        }
+
+        @supports not (animation-timeline: view()) {
+            .line { color: var(--text); transform: none; opacity: 1; }
+        }
+
+        .top-cursor {
+            color: var(--accent);
+            font-weight: 600;
+            animation: cursorBreathe 2.4s ease-in-out infinite;
+        }
+
+        @keyframes cursorBreathe {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .bottom-cursor {
+            padding-left: 2.5rem;
+            margin-top: 2rem;
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .bottom-cursor .blink { animation: cursorBlink 1.2s step-end infinite; }
+
+        @keyframes cursorBlink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .prompt {
+            color: var(--accent);
+            padding-left: 2.5rem;
+            margin-top: 3.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.82rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            animation: lineFocus linear both;
+            animation-timeline: view();
+            animation-range: entry 0% exit 100%;
+        }
+
+        .line-bright { font-weight: 600; }
+
+        .line-accent {
+            animation: lineFocusAccent linear both;
+            animation-timeline: view();
+            animation-range: entry 0% exit 100%;
+        }
+
+        @keyframes lineFocusAccent {
+            0%   { color: var(--dim); opacity: 0.25; transform: scale(0.97); }
+            35%  { color: var(--accent); opacity: 1; transform: scale(1); }
+            50%  { color: var(--accent); opacity: 1; transform: scale(1.005); }
+            65%  { color: var(--accent); opacity: 1; transform: scale(1); }
+            100% { color: var(--dim); opacity: 0.25; transform: scale(0.97); }
+        }
+
+        .line-stat {
+            font-size: 0.88rem;
+            padding-left: 4.5rem;
+            border-left: 2px solid var(--border);
+            margin-left: 2.5rem;
+            padding-top: 0.3rem;
+            padding-bottom: 0.3rem;
+            animation: lineFocus linear both;
+            animation-timeline: view();
+            animation-range: entry 0% exit 100%;
+        }
+
+        .line-stat .num { font-weight: 600; }
+
+        .line-quote {
+            font-style: italic;
+            padding-left: 4.5rem;
+            border-left: 2px solid var(--accent);
+            margin-left: 2.5rem;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            animation: lineFocus linear both;
+            animation-timeline: view();
+            animation-range: entry 0% exit 100%;
+        }
+
+        .line-feature { padding-left: 4rem; }
+
+        .line-feature::before {
+            content: "\2192 ";
+            color: var(--accent);
+            font-weight: 700;
+            margin-left: -1.5rem;
+        }
+
+        .line-dim { font-size: 0.85rem; font-style: italic; }
+
+        .tier-block {
+            border: 1px solid var(--border);
+            padding: 1.8rem 1.8rem 1.8rem 2.5rem;
+            margin: 0.8rem 0;
+            position: relative;
+            animation: tierFocus linear both;
+            animation-timeline: view();
+            animation-range: entry 0% exit 100%;
+        }
+
+        @keyframes tierFocus {
+            0%   { opacity: 0.15; border-color: var(--border); }
+            30%  { opacity: 1; border-color: var(--accent); }
+            70%  { opacity: 1; border-color: var(--accent); }
+            100% { opacity: 0.15; border-color: var(--border); }
+        }
+
+        .tier-block:hover {
+            background: var(--accent-glow);
+            transform: translateX(6px);
+            transition: all 0.3s ease;
+        }
+
+        .tier-block .line {
+            padding-left: 0;
+            animation: lineFocus linear both;
+            animation-timeline: view();
+            animation-range: entry 0% exit 100%;
+        }
+
+        .tier-featured { background: rgba(196, 164, 74, 0.03); }
+
+        .tier-label {
+            position: absolute;
+            top: -0.55rem;
+            right: 1.2rem;
+            background: var(--accent);
+            color: var(--bg);
+            font-size: 0.6rem;
+            padding: 0.1rem 0.6rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .cta-wrap { text-align: center; margin: 3rem 0 2rem; }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 3.5rem;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            text-decoration: none;
+            font-family: inherit;
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: 600;
+            transition: all 0.35s ease;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            background: var(--accent);
+            color: var(--bg);
+            box-shadow: 0 0 40px rgba(196, 164, 74, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .footer-line {
+            margin-top: 0.3rem;
+            font-size: 0.78rem;
+            text-align: left;
+            padding-left: 2.5rem;
+            animation: lineFocus linear both;
+            animation-timeline: view();
+            animation-range: entry 0% exit 100%;
+        }
+
+        .footer-line a { color: var(--accent); text-decoration: none; }
+
+        .space-lg { height: 4rem; }
+        .space-md { height: 2rem; }
+        .space-sm { height: 1rem; }
+
+        @media (max-width: 600px) {
+            .terminal { padding: 2rem 1.2rem 50vh; }
+            .line { padding-left: 2rem; }
+            .prompt { padding-left: 2rem; }
+            .line-stat { padding-left: 3.5rem; margin-left: 2rem; }
+            .line-quote { padding-left: 3.5rem; margin-left: 2rem; }
+            .line-feature { padding-left: 3rem; }
+            .tier-block { padding-left: 1.5rem; }
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(17, 17, 16, 0.92);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border);
+            padding: 0.7rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+        }
+
+        .nav-brand {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+        }
+
+        .nav-links a {
+            color: var(--mid);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            letter-spacing: 0.05em;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+    </style>
+</head>
+<body>
+
+    <nav class="nav">
+        <a href="../" class="nav-brand">DRAGONLIGHT</a>
+        <div class="nav-links">
+            <a href="../">Home</a>
+            <a href="#connect">Connect</a>
+        </div>
+    </nav>
+
+    <div class="terminal" style="padding-top: 5rem;">
+
+        <div class="prompt">$ daos --init</div>
+
+        <div class="space-md"></div>
+        <div class="line line-accent" style="font-size: 2.5rem; font-weight: 300; letter-spacing: 0.2em; padding-left: 2.5rem;">DAOS</div>
+        <div class="line" style="font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase;">Dharmic Alignment Operating System</div>
+
+        <div class="space-lg"></div>
+
+        <div class="line"><span class="top-cursor">$ </span>The engine inside every Dragonlight</div>
+        <div class="line">engagement. A bespoke intelligence</div>
+        <div class="line">system that learns how your team</div>
+        <div class="line">actually thinks, then does in an hour</div>
+        <div class="line">what used to take them a week.</div>
+
+        <div class="space-md"></div>
+
+        <div class="line">I spent twenty years building other</div>
+        <div class="line">people's empires — over a billion</div>
+        <div class="line">dollars in technology assets, more than</div>
+        <div class="line">a hundred multi-millionaires created</div>
+        <div class="line">through the systems I architected.</div>
+        <div class="line">Then I sat down and built one for</div>
+        <div class="line">myself. Once it was running, I gave it</div>
+        <div class="line">one of the largest tasks I could</div>
+        <div class="line">imagine, and the result left me</div>
+        <div class="line">completely speechless.</div>
+
+        <div class="space-md"></div>
+
+        <div class="line">The raw material was two years of</div>
+        <div class="line">accumulated expertise across more than</div>
+        <div class="line">sixty transcripts, several journals,</div>
+        <div class="line">1.15 million characters of coaching</div>
+        <div class="line">calls and deal memos and strategy</div>
+        <div class="line">sessions, all of it sitting in a cloud</div>
+        <div class="line">folder, unstructured and untouched.</div>
+        <div class="line">One command, and the system consumed</div>
+        <div class="line">every character and produced a complete,</div>
+        <div class="line">deployable, teachable framework with</div>
+        <div class="line">curated testimonials, named stages,</div>
+        <div class="line">structured methodology, and a</div>
+        <div class="line">presentation a closer could use the</div>
+        <div class="line">next morning. All of this,</div>
+        <div class="line line-accent">before lunch.</div>
+
+        <div class="space-md"></div>
+
+        <div class="line">A traditional consulting firm would</div>
+        <div class="line">staff an analyst team, a copywriter,</div>
+        <div class="line">and a project manager for that scope?</div>
+        <div class="line">Three weeks and fifty thousand dollars,</div>
+        <div class="line">minimum. The system completed it in</div>
+        <div class="line">hours because it already held the full</div>
+        <div class="line">context of the operation.</div>
+
+        <div class="space-md"></div>
+
+        <div class="line">I have not touched a line of code.</div>
+        <div class="line">I tell it what to build, and it simply</div>
+        <div class="line">works. And this only gets faster as</div>
+        <div class="line">it goes.</div>
+
+        <div class="space-lg"></div>
+
+        <div class="prompt">$ daos --capabilities</div>
+
+        <div class="space-md"></div>
+
+        <div class="line line-bright">Compounding institutional memory.</div>
+        <div class="line">Every call recording, client note,</div>
+        <div class="line">deal memo, and strategy session your</div>
+        <div class="line">team has ever produced, consumed and</div>
+        <div class="line">synthesized into searchable intelligence</div>
+        <div class="line">deployed across the entire operation.</div>
+        <div class="line">The past is not sunk cost.</div>
+        <div class="line line-accent">It is unmined capital.</div>
+
+        <div class="space-md"></div>
+
+        <div class="line line-bright">Holistic team intelligence.</div>
+        <div class="line">Cognitive strengths, decision-making</div>
+        <div class="line">architecture, energy patterns. The full</div>
+        <div class="line">picture of how each person on the team</div>
+        <div class="line">actually operates, not a title on an</div>
+        <div class="line">org chart. The system knows who is</div>
+        <div class="line">sharpest right now and routes work</div>
+        <div class="line">to them accordingly.</div>
+
+        <div class="space-md"></div>
+
+        <div class="line line-bright">Force multiplication.</div>
+        <div class="line">Every person on the team operates with</div>
+        <div class="line">the pattern recognition of the entire</div>
+        <div class="line">firm behind them. A junior analyst</div>
+        <div class="line">inherits the intelligence of every deal</div>
+        <div class="line">the senior partners have ever closed,</div>
+        <div class="line">and a new hire on day one has access to</div>
+        <div class="line">context that would otherwise take years</div>
+        <div class="line">to accumulate organically.</div>
+
+        <div class="space-md"></div>
+
+        <div class="line line-bright">Operational velocity.</div>
+        <div class="line">Analysis, reporting, research,</div>
+        <div class="line">scheduling, synthesis: the grunt work</div>
+        <div class="line">that burns out the best people on any</div>
+        <div class="line">team, handled. Your humans get to go</div>
+        <div class="line">be human, build relationships, close</div>
+        <div class="line">deals, and be in the room where the</div>
+        <div class="line">outcome is decided.</div>
+
+        <div class="space-md"></div>
+
+        <div class="line line-bright">Real-time state awareness.</div>
+        <div class="line">The system reads the current state of</div>
+        <div class="line">your operation and adapts in real time.</div>
+        <div class="line">Who is in flow, who is depleted, which</div>
+        <div class="line">client needs attention today, what fell</div>
+        <div class="line">through the cracks last week.</div>
+        <div class="line">Operational awareness that no dashboard</div>
+        <div class="line">and no weekly standup has ever provided,</div>
+        <div class="line">because those tools report what already</div>
+        <div class="line">happened. This one anticipates what</div>
+        <div class="line">should happen next.</div>
+
+        <div class="space-sm"></div>
+
+        <div class="line-quote">"Your edge is not data. Everyone has</div>
+        <div class="line-quote">data. Your edge is your people, and</div>
+        <div class="line-quote">DAOS makes every single one of them</div>
+        <div class="line-quote">dangerous."</div>
+
+        <div class="space-lg"></div>
+
+        <div class="prompt">$ daos --architect</div>
+
+        <div class="space-md"></div>
+
+        <div class="line-stat"><span class="num">$1B+</span> in technology assets built, from startups to IPO-stage</div>
+        <div class="line-stat"><span class="num">100+</span> multi-millionaires created through systems architected</div>
+        <div class="line-stat"><span class="num">22x returns</span> ($200K to $1.5M) with intuition and data, seven months</div>
+        <div class="line-stat"><span class="num">20+ years</span> building from zero to scale</div>
+
+        <div class="space-md"></div>
+
+        <div class="line">I built systems that made other people</div>
+        <div class="line">wealthy for two decades. The data</div>
+        <div class="line">infrastructure, the decision</div>
+        <div class="line">architecture, the operational frameworks</div>
+        <div class="line">that turned raw ambition into</div>
+        <div class="line">compounding returns.</div>
+        <div class="line">DAOS is what happens when that same</div>
+        <div class="line">engineering discipline meets a system</div>
+        <div class="line">that actually learns from the people</div>
+        <div class="line">who use it.</div>
+
+        <div class="space-md"></div>
+
+        <div class="line">The system built itself while building</div>
+        <div class="line">the business. The competitive analysis,</div>
+        <div class="line">the methodology, the pitch deck, the</div>
+        <div class="line">web pages you are reading right now.</div>
+        <div class="line">One person. No team. No investors.</div>
+        <div class="line line-accent">And this only gets faster as it goes.</div>
+
+        <div class="space-lg"></div>
+
+        <div class="prompt">$ daos --landscape</div>
+
+        <div class="space-md"></div>
+
+        <div class="line">Validated against every major platform</div>
+        <div class="line">in the category.</div>
+
+        <div class="space-sm"></div>
+
+        <div class="line line-feature">Compounding institutional memory</div>
+        <div class="line line-feature">Force multiplication across the team</div>
+        <div class="line line-feature">Holistic operator and team profiling</div>
+        <div class="line line-feature">Operational velocity at enterprise grade</div>
+        <div class="line line-feature">Real-time state awareness and routing</div>
+
+        <div class="space-sm"></div>
+
+        <div class="line">No platform on the market bridges even</div>
+        <div class="line">three of these capabilities. Cloverleaf,</div>
+        <div class="line">Crystal, Einstein, Notion AI, Viva:</div>
+        <div class="line">more than fifteen platforms assessed.</div>
+        <div class="line">Each covers ten to twenty percent of</div>
+        <div class="line">the architecture.</div>
+
+        <div class="space-sm"></div>
+
+        <div class="line line-accent">The combination does not exist</div>
+        <div class="line line-accent">anywhere else.</div>
+
+        <div class="space-lg"></div>
+
+        <div class="prompt" id="connect">$ daos --access</div>
+
+        <div class="space-md"></div>
+
+        <div class="tier-block tier-featured">
+            <div class="tier-label">Proprietary</div>
+            <div class="line line-bright" style="padding-left: 0;">DAOS is not a product you purchase.</div>
+            <div class="space-sm"></div>
+            <div class="line" style="padding-left: 0;">It is the proprietary intelligence engine</div>
+            <div class="line" style="padding-left: 0;">at the core of every Dragonlight consulting</div>
+            <div class="line" style="padding-left: 0;">engagement. Each instance is architected</div>
+            <div class="line" style="padding-left: 0;">bespoke, configured to your operation,</div>
+            <div class="line" style="padding-left: 0;">your team's cognitive architecture, and</div>
+            <div class="line" style="padding-left: 0;">the specific workflows that drive your</div>
+            <div class="line" style="padding-left: 0;">revenue.</div>
+            <div class="space-sm"></div>
+            <div class="line" style="padding-left: 0;">Access is through a consulting engagement</div>
+            <div class="line" style="padding-left: 0;">with <a href="../" style="color: var(--accent); text-decoration: none;">Dragonlight International</a>.</div>
+            <div class="space-sm"></div>
+            <div class="line line-dim" style="padding-left: 0;">Founding implementations are limited</div>
+            <div class="line line-dim" style="padding-left: 0;">by the architect's capacity.</div>
+        </div>
+
+        <div class="space-md"></div>
+
+        <div class="line">If your intelligence exceeds your</div>
+        <div class="line">infrastructure, the next step is</div>
+        <div class="line">a conversation.</div>
+
+        <div class="space-md"></div>
+
+        <div class="cta-wrap">
+            <a href="../#begin" class="cta-button">Begin a Conversation</a>
+        </div>
+
+        <div class="space-sm"></div>
+
+
+        <div class="space-lg"></div>
+        <div class="space-lg"></div>
+
+        <div class="prompt">$ daos --version 0.3.0</div>
+        <div class="space-sm"></div>
+        <div class="footer-line">Built by <a href="https://threads.net/@the.korrigon.show">Korrigon</a> &middot; Dragonlight International</div>
+        <div class="footer-line">Founder and Principal. $1B+ built. Now building it for you.</div>
+        <div class="footer-line">Currently wearing sweatpants.</div>
+
+        <div class="space-md"></div>
+        <div class="footer-line" style="color: var(--dim);"><a href="../#terms" style="color: var(--dim); text-decoration: none;">Terms</a> &middot; <a href="../#privacy" style="color: var(--dim); text-decoration: none;">Privacy</a> &middot; <a href="../#refunds" style="color: var(--dim); text-decoration: none;">Refund Policy</a></div>
+
+        <div class="space-lg"></div>
+
+        <div class="bottom-cursor">$ <span class="blink">&#9612;</span></div>
+
+        <div class="space-lg"></div>
+
+    </div>
+</body>
+</html>
