@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dragonlight International — Bespoke AI Operating Systems</title>
+    <style>
+        :root {
+            --bg: #0e0e0d;
+            --surface: #141413;
+            --text: #e8e6e1;
+            --dim: #b5b1a9;
+            --muted: #918d85;
+            --accent: #c4a44a;
+            --accent-soft: rgba(196, 164, 74, 0.06);
+            --border: #252420;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            font-size: 21px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ---- Sticky nav ---- */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(14, 14, 13, 0.92);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border);
+            padding: 0.7rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.82rem;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-brand {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .nav-links a {
+            color: var(--dim);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        /* ---- Each "slide" ---- */
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 6rem 2.5rem;
+            max-width: 840px;
+            margin: 0 auto;
+            scroll-snap-align: start;
+            position: relative;
+        }
+
+        .slide::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 2.5rem;
+            right: 2.5rem;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .slide:last-child::after { display: none; }
+
+        /* ---- Scroll reveal ---- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: revealIn linear both;
+            animation-timeline: view();
+            animation-range: entry 0% entry 20%;
+        }
+
+        @keyframes revealIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @supports not (animation-timeline: view()) {
+            .reveal { opacity: 1; transform: none; }
+        }
+
+        /* ---- Slide label ---- */
+        .slide-num {
+            font-size: 0.75rem;
+            color: var(--muted);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        /* ---- Typography ---- */
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 200;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 1.7rem;
+            font-weight: 300;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        h2 .accent { color: var(--accent); }
+
+        p {
+            font-size: 1rem;
+            margin-bottom: 1.2rem;
+            color: var(--dim);
+            max-width: 640px;
+        }
+
+        p.large {
+            font-size: 1.1rem;
+            color: var(--text);
+            font-weight: 300;
+        }
+
+        /* ---- Stats row ---- */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat { text-align: center; }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 200;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 0.4rem;
+        }
+
+        .stat-label {
+            font-size: 0.78rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            line-height: 1.5;
+        }
+
+        /* ---- Problem / Solution blocks ---- */
+        .contrast-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin: 2rem 0;
+        }
+
+        .contrast-block h4 {
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 1rem;
+        }
+
+        .contrast-block.problem h4 { color: var(--muted); }
+        .contrast-block.solution h4 { color: var(--accent); }
+
+        .contrast-block li {
+            font-size: 0.88rem;
+            color: var(--dim);
+            margin-bottom: 0.6rem;
+            list-style: none;
+            padding-left: 1.2rem;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .contrast-block.problem li::before {
+            content: "\2014";
+            position: absolute;
+            left: 0;
+            color: var(--muted);
+        }
+
+        .contrast-block.solution li::before {
+            content: "\2192";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        /* ---- Service cards ---- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            border: 1px solid var(--border);
+            padding: 2rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        .card-title {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 0.8rem;
+            letter-spacing: 0.03em;
+        }
+
+        .card p { font-size: 0.82rem; line-height: 1.7; }
+
+        /* ---- Market data ---- */
+        .market-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .market-stat {
+            border-left: 1px solid var(--accent);
+            padding-left: 1.5rem;
+        }
+
+        .market-stat .number {
+            font-size: 1.6rem;
+            font-weight: 200;
+            color: var(--accent);
+            display: block;
+        }
+
+        .market-stat .label {
+            font-size: 0.85rem;
+            color: var(--dim);
+            margin-top: 0.3rem;
+        }
+
+        /* ---- The Ask ---- */
+        .ask-block {
+            border: 1px solid var(--accent);
+            padding: 3rem;
+            text-align: center;
+            margin: 2rem 0;
+            background: var(--accent-soft);
+        }
+
+        .ask-block h2 { margin-bottom: 1rem; max-width: 100%; }
+
+        .ask-block p {
+            max-width: 100%;
+            text-align: center;
+            margin: 0 auto 1rem;
+        }
+
+        /* ---- CTA ---- */
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 3rem;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.78rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: 500;
+            transition: all 0.35s ease;
+            background: transparent;
+            margin-top: 1.5rem;
+        }
+
+        .cta-button:hover {
+            background: var(--accent);
+            color: var(--bg);
+            box-shadow: 0 0 40px rgba(196, 164, 74, 0.12);
+        }
+
+        /* ---- Contact form ---- */
+        .contact-form {
+            max-width: 500px;
+            margin: 2rem auto;
+            text-align: left;
+        }
+
+        .contact-form input,
+        .contact-form textarea,
+        .contact-form select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            margin-bottom: 1rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-size: 0.88rem;
+            transition: border-color 0.2s;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus,
+        .contact-form select:focus { outline: none; border-color: var(--accent); }
+
+        .contact-form select { -webkit-appearance: none; appearance: none; cursor: pointer; }
+        .contact-form textarea { min-height: 120px; resize: vertical; }
+
+        .contact-form button {
+            padding: 0.9rem 2.5rem;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            background: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-size: 0.82rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .contact-form button:hover { background: var(--accent); color: var(--bg); }
+
+        /* ---- Footer ---- */
+        .footer {
+            font-size: 0.7rem;
+            color: var(--muted);
+            margin-top: 2rem;
+            line-height: 2.2;
+        }
+
+        .footer a { color: var(--dim); text-decoration: none; }
+        .footer a:hover { color: var(--accent); }
+
+        .compliance {
+            font-size: 0.65rem;
+            color: var(--muted);
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            line-height: 2;
+        }
+
+        .compliance a { color: var(--dim); text-decoration: none; }
+        .compliance a:hover { color: var(--accent); }
+
+        .compliance h5 {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--dim);
+        }
+
+        .compliance p {
+            font-size: 0.65rem;
+            color: var(--muted);
+            max-width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 700px) {
+            .slide { padding: 4rem 1.5rem; }
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.4rem; }
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .contrast-grid { grid-template-columns: 1fr; }
+            .card-grid { grid-template-columns: 1fr; }
+            .market-stats { grid-template-columns: 1fr; }
+            .nav { padding: 0.7rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav">
+        <a href="./" class="nav-brand">Dragonlight</a>
+        <div class="nav-links">
+            <a href="#system">The System</a>
+            <a href="#architect">The Architect</a>
+            <a href="#begin">Connect</a>
+        </div>
+    </nav>
+
+    <!-- ======== SLIDE 1: HERO ======== -->
+    <div class="slide" style="padding-top: 5rem;">
+        <div class="reveal">
+            <h1>Dragonlight International</h1>
+            <p class="large">The first consulting firm building bespoke AI operating systems for operators whose intelligence exceeds their infrastructure.</p>
+            <p>Sixty-three percent of strategy value never reaches the bottom line. The strategy was sound. The execution infrastructure could not keep pace with the mind that made the call. Dragonlight builds the system that closes that gap.</p>
+            <p style="color: var(--muted); font-size: 0.88rem; margin-top: 3rem;">Founded by Korrigon · Denver, Colorado · 2026</p>
+        </div>
+    </div>
+
+    <!-- ======== SLIDE 2: THE EXECUTION GAP ======== -->
+    <div class="slide">
+        <div class="reveal">
+            <div class="slide-num">The Execution Gap</div>
+            <h2>The problem is not <span class="accent">intelligence</span>. It is <span class="accent">throughput</span>.</h2>
+
+            <div class="contrast-grid">
+                <div class="contrast-block problem">
+                    <h4>The Current State</h4>
+                    <ul>
+                        <li>Institutional knowledge locked in hard drives, heads, and notebooks</li>
+                        <li>Call recordings nobody replays and deal memos nobody re-reads</li>
+                        <li>Senior people spending their sharpest hours on analysis, reporting, and synthesis</li>
+                        <li>Context decaying every week it sits unextracted</li>
+                        <li>One key person leaves and years of intelligence walk out with them</li>
+                    </ul>
+                </div>
+                <div class="contrast-block solution">
+                    <h4>What Changes</h4>
+                    <ul>
+                        <li>Every person operates with the pattern recognition of the entire firm behind them</li>
+                        <li>Institutional memory that compounds instead of decays</li>
+                        <li>What took a week now takes an hour</li>
+                        <li>The right person matched to the right deal based on current state and expertise</li>
+                        <li>Your humans get to be human: <span style="color: var(--accent);">build relationships</span>, <span style="color: var(--accent);">close deals</span>, <span style="color: var(--accent);">read the room</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======== SLIDE 3: THE ARCHITECT ======== -->
+    <div class="slide" id="architect">
+        <div class="reveal">
+            <div class="slide-num">The Architect</div>
+            <h2>Two decades building at <span class="accent">every stage</span> from idea to IPO.</h2>
+
+            <div class="stats-row">
+                <div class="stat">
+                    <span class="stat-number">$1B+</span>
+                    <span class="stat-label">Technology assets built</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">100+</span>
+                    <span class="stat-label">Multi-millionaires created</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">22x</span>
+                    <span class="stat-label">Returns in 7 months</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">20+</span>
+                    <span class="stat-label">Years at scale</span>
+                </div>
+            </div>
+
+            <p>Twenty years as a CTO and systems architect, building companies, products, and wealth infrastructure from zero to scale. Then built an AI operating system from scratch, solo, that outperforms the output of a twenty-person department. The system consumed two years of accumulated expertise across more than sixty transcripts and produced a complete deployable framework — in hours. It already held the full context of the operation.</p>
+            <p>Now building it for others.</p>
+        </div>
+    </div>
+
+    <!-- ======== SLIDE 4: THE ENGAGEMENT ======== -->
+    <div class="slide">
+        <div class="reveal">
+            <div class="slide-num">The Engagement</div>
+            <h2>One engagement. <span class="accent">Built for your operation.</span></h2>
+
+            <div class="card-grid">
+                <div class="card" style="border-color: var(--accent); background: var(--accent-soft);">
+                    <div class="card-title">DAOS Implementation</div>
+                    <p style="font-size: 0.92rem; line-height: 1.8;">A bespoke intelligence system configured to how your people actually decide, operate, and think. DAOS learns how your team works and does in an hour what used to take a week. It extracts institutional knowledge from call recordings, client notes, and deal memos. It builds holistic profiles of every team member and matches the right person to the right task based on cognitive strengths, current energy, and expertise. Every interaction makes the system more intelligent than it was the day before.</p>
+                    <p style="margin-top: 1rem; font-size: 0.88rem; color: var(--dim);">Discovery. Architecture. Build. Deployment. Ongoing intelligence.</p>
+                    <p style="margin-top: 1rem; font-size: 0.82rem; color: var(--accent); font-style: italic;">Your edge is not data. Everyone has data. Your edge is your people, and DAOS makes every single one of them dangerous.</p>
+                    <p style="margin-top: 1rem; font-size: 0.82rem; color: var(--muted);">Founding implementations happening now.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======== SLIDE 5: THE SYSTEM / DAOS ======== -->
+    <div class="slide" id="system">
+        <div class="reveal">
+            <div class="slide-num">The System</div>
+            <h2><span class="accent">DAOS</span> — The engine inside every Dragonlight engagement.</h2>
+
+            <p class="large">Two years of coaching calls, more than sixty transcripts, 1.15 million characters of accumulated expertise — all of it sitting in a cloud folder, unstructured and untouched. The system consumed all of it in a single pass and produced a complete, deployable, teachable framework with curated testimonials, named stages, structured methodology, and a presentation a closer could use the next morning.</p>
+
+            <p>A traditional consulting firm would staff an analyst team, a copywriter, and a project manager for that scope. Three weeks minimum. The system completed it in hours, because it already held the full context of the operation. The retro-compounding architecture learns from everything that already happened — and that accumulated intelligence is available to every person on the team from day one. Every interaction makes it more intelligent than the day before.</p>
+
+            <p style="font-size: 0.82rem;"><a href="daos/" style="color: var(--accent); text-decoration: none;">View the full DAOS architecture</a></p>
+        </div>
+    </div>
+
+    <!-- ======== SLIDE 6: THE LANDSCAPE ======== -->
+    <div class="slide">
+        <div class="reveal">
+            <div class="slide-num">The Landscape</div>
+            <h2>Nothing else <span class="accent">operates</span> at this intersection.</h2>
+
+            <div class="market-stats">
+                <div class="market-stat">
+                    <span class="number">$10T</span>
+                    <span class="label">Annual cost of organizational friction globally (PwC)</span>
+                </div>
+                <div class="market-stat">
+                    <span class="number">63%</span>
+                    <span class="label">Of strategy value that never materializes due to execution failure</span>
+                </div>
+                <div class="market-stat">
+                    <span class="number">$500K+</span>
+                    <span class="label">Where McKinsey starts. Palantir serves billion-dollar enterprises.</span>
+                </div>
+                <div class="market-stat">
+                    <span class="number">0</span>
+                    <span class="label">Products serving the $5M to $100M operator with enterprise-grade intelligence</span>
+                </div>
+            </div>
+
+            <p>Palantir builds for billion-dollar enterprises. McKinsey starts at half a million per engagement. Accenture serves the Fortune 500. The operator at the five to one hundred million dollar level, the one whose decisions demand the same caliber of intelligence as any enterprise, has no infrastructure that matches the sophistication of those decisions. Dragonlight was built for that operator.</p>
+        </div>
+    </div>
+
+    <!-- ======== SLIDE 7: NEXT STEP ======== -->
+    <div class="slide" id="begin">
+        <div class="reveal">
+            <div class="slide-num">Next Step</div>
+
+            <div class="ask-block">
+                <h2>Begin a <span class="accent">Conversation</span></h2>
+                <p>Engagements are selective and limited by the architect's capacity.<br/> The next step is a conversation.</p>
+
+                <form class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+                    <input type="hidden" name="access_key" value="621f0819-89db-4540-91ae-cbddc74e26fc">
+                    <input type="hidden" name="subject" value="Dragonlight — New Inquiry">
+                    <input type="hidden" name="redirect" value="https://dragonlightintl.pages.dev/">
+
+                    <input type="text" name="name" placeholder="Name" required>
+                    <input type="email" name="email" placeholder="Email" required>
+
+                    <select name="interest" required>
+                        <option value="" disabled selected>What brings you here</option>
+                        <option value="daos-team">DAOS Implementation — for my team</option>
+                        <option value="daos-solo">DAOS Implementation — for my operation</option>
+                        <option value="partnership">Partnership or Referral</option>
+                        <option value="conversation">Not sure yet — a conversation would help</option>
+                    </select>
+
+                    <textarea name="message" placeholder="Anything useful for the first conversation"></textarea>
+
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+
+            <div class="footer">
+                <p>Dragonlight International · Denver, Colorado</p>
+                <p>Founded by <a href="https://threads.net/@the.korrigon.show">Korrigon</a></p>
+                <p>&copy; 2026 Dragonlight International. All rights reserved.</p>
+            </div>
+
+            <div class="compliance" id="terms">
+                <h5>Terms of Service</h5>
+                <p>By engaging Dragonlight International's consulting services, you agree to the terms outlined in your engagement agreement. All proprietary systems, methodologies, and intellectual property developed by Dragonlight remain the property of Dragonlight International unless otherwise specified in the consulting agreement. Client data, configurations, and operational content remain the property of the client. Dragonlight International reserves the right to decline or discontinue engagements at its discretion. These terms are governed by the laws of the State of Colorado.</p>
+
+                <h5 id="privacy">Privacy Policy</h5>
+                <p>Dragonlight International collects only the information necessary to deliver consulting services and process payments. Client operational data is treated as confidential and is never used for training, resold, or shared with third parties. Payment processing is handled securely through Stripe, which maintains its own privacy practices. For questions about data handling, connect via the form above or on Threads.</p>
+
+                <h5 id="refunds">Refund &amp; Cancellation Policy</h5>
+                <p>Consulting engagements follow the terms outlined in the individual engagement agreement. Phase-based implementations are billed per phase. Completed phases are non-refundable. Uncommenced phases may be cancelled with written notice. Ongoing retainer agreements may be terminated with 30 days written notice. Deposits for future engagements are refundable within 14 days of payment if services have not yet begun.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
